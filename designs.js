@@ -3,7 +3,7 @@
 */
 
 // Define variable names
-let color;
+let selectedColor;
 let width;
 let height;
 
@@ -18,45 +18,31 @@ $('#sizePicker').submit((e) => {
 
   // Pass values to makeGrid function as an argument
   makeGrid(width, height);
-
-  console.log('Height:= ' + height + ' Width:= ' + width);
 });
 
 // When size is submitted by the user, call makeGrid()
 
-makeGrid = (height, width) => {
+makeGrid = (width, height) => {
   // Clear table data and table row when function called
   $('td').remove();
   $('tr').remove();
 
   // Form grid
-  for (var i = 1; i <= width; i++) {
+  for (let row = 1; row <= height; row++) {
     // Create table row
-    $('#pixelCanvas').append('<tr id=row' + i + '></tr>');
-    for (var j = 1; j <= height; j++) {
+    $('#pixelCanvas').append('<tr id=row' + row + '></tr>');
+    for (let column = 1; column <= width; column++) {
       // Create table row data and insert into table row
-      $('#row' + i).append('<td></td>');
+      $('#row' + row).append('<td></td>');
     }
   }
-
-  addColor = () => {
+  $('td').click(function fill() {
     // select color value from color picker
-    color = document.getElementById('colorPicker').value;
-    console.log(rowData);
-    let check = rowData.hasAttribute('style');
-    if (check) {
-      rowData.removeAttribute('style');
-      console.log(check);
-    } else {
-      rowData.setAttribute('style', 'background:' + color);
-    }
-    console.log(rowData);
-  };
+    selectedColor = document.getElementById('colorPicker').value;
 
-  // onClick event to select single box (td)
-  let rowData = document.querySelector('td');
-  console.log('row data', rowData);
-  rowData.onClick = addColor;
-
-  rowData.addEventListener('click', addColor);
+    // Check && clear if 'td' has a style attribute
+    if ($(this).attr('style')) return $(this).removeAttr('style');
+    // Else apply style
+    $(this).attr('style', 'background:' + selectedColor);
+  });
 };
